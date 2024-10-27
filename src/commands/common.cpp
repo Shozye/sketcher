@@ -2,9 +2,9 @@
 #include"../sketches/FastExpSketch.hpp"
 #include"../sketches/QSketch.hpp"
 #include<iostream>
-#include"distribution/NormalDistribution.hpp"
-#include"distribution/UniformIntDistribution.hpp"
-#include"distribution/UniformRealDistribution.hpp"
+#include"../distribution/NormalDistribution.hpp"
+#include"../distribution/UniformIntDistribution.hpp"
+#include"../distribution/UniformRealDistribution.hpp"
 
 Sketch* createSketch(const Arguments& args, uint sketchIndex){
     if (args.sketchName == "fastexpsketch"){

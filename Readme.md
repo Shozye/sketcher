@@ -11,7 +11,7 @@ make
 ## Quick Start
 
 ```bash
-./sketcher test -name fastexpsketch -e 1000 -s 1 -w uniform 1 1 -i distinct
+./sketcher test -name fastexpsketch -e 1000 -s 1 -w uniform_int 1 1 -i distinct
 ```
 The command above creates 1 FastExpSketch with 1000 distinct elements, where each element has a weight of 1. Then it performs a basic analysis of the created sketch.
 
@@ -34,7 +34,7 @@ Create and save sketches to a file, which can be paused and resumed if the appli
 ./sketcher sketch <filename> -name <sketch_name> -e <amount_elements> -s <amount_sketches> -w <weight_distribution> -i <item_distribution>
 ```
 
-- **Example**: `./sketcher sketch sketches.dat -name qsketch -e 1000 -s 10 -w uniform 1 10 -i distinct`
+- **Example**: `./sketcher sketch sketches.dat -name qsketch -e 1000 -s 10 -w uniform_int 1 10 -i distinct`
   - This command creates 10 QSketches with 1000 distinct elements and uniform weights between 1 and 10 and saves them to `sketches.dat`.
 
 ### `analyse`
@@ -56,7 +56,7 @@ Load sketches from a saved file and perform an analysis.
 
 - **-s `<amount_sketches>`**: Number of sketches to create. Default: `1`
 
-- **-w `<weight_distribution>`**: Distribution type for element weights. Default: `uniform 1 1`. Options:
+- **-w `<weight_distribution>`**: Distribution type for element weights. Default: `uniform_int 1 1`. Options:
   - `uniform_int a b`: Uniformly distributes weights between [`a`, `b`]. Weights are only integers.
   - `uniform_real a b`: Uniformly distributes weights between [`a`, `b`]. `b` not included.
   - `normal e v`: Distributes weights according to a normal distribution with mean `e` and variance `v`.
@@ -66,3 +66,5 @@ Load sketches from a saved file and perform an analysis.
 - **-i `<item_distribution>`**: Specifies item distribution type. Options:
   - `distinct` (default)
   - `repeated`
+
+- **-seed `<seed_weight_distribution>**: Specifies seed for generating weight distribution. Integer.

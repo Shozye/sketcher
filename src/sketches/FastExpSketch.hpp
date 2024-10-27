@@ -8,7 +8,7 @@ class FastExpSketch : public Sketch{
     public:
         FastExpSketch(int m, int seed);
         void consume(const uint8_t* item, int length, double weight) override final;
-        void saveStateIntoStream() override final;
+        void saveStateIntoStream(std::ofstream ofile) override final;
         double estimate();
         std::string getstructure();
         ~FastExpSketch();

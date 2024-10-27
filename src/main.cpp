@@ -57,7 +57,11 @@ Arguments parseArguments(int argc, char* argv[]) {
             }
         } else if (arg == "-i" && i + 1 < argc) {
             args.itemDist = argv[++i];
-        } else if (args.command == SKETCH && i == 2) { // handle filename for 'sketch'
+        } else if (arg == "-seed" && i + 1 < argc) {
+            args.weightDistSeed = std::stoi(argv[++i]);
+        }
+        
+        else if (args.command == SKETCH && i == 2) { // handle filename for 'sketch'
             args.filename = arg;
         } else if (args.command == ANALYSE && i == 2) { // handle filename for `analyse`
             args.filename = arg;

@@ -33,6 +33,11 @@ QSketch::QSketch(int m, int bytes, int seed)
 
 QSketch::~QSketch(){}
 
+void QSketch::saveStateIntoStream(std::ofstream ofile){
+
+}
+
+
 void QSketch::consume(const uint8_t* item, int length, double weight){
     std::memcpy(&rng_seed, item, sizeof(uint64_t));
     int j;

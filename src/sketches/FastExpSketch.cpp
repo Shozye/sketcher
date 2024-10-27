@@ -31,6 +31,10 @@ FastExpSketch::FastExpSketch(int m, int seed)
 
 FastExpSketch::~FastExpSketch(){}
 
+void FastExpSketch::saveStateIntoStream(std::ofstream ofile){
+
+}
+
 int FastExpSketch::rand(int min, int max){
     rng_seed = rng_seed * 1103515245 + 12345;
     auto temp = (unsigned)(rng_seed/65536) % 32768;
