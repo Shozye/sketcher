@@ -1,0 +1,4 @@
+callgrind.out.*
+bin
+build
+.vscode
