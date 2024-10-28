@@ -13,20 +13,12 @@ FastExpSketch::FastExpSketch(int m, int seed)
         structure(std::vector<double>(m, std::numeric_limits<double>::max())),
         structure_size(m),
         permutationSwaps(std::vector<unsigned int>(m)),
-        max(std::numeric_limits<double>::max())
+        max(std::numeric_limits<double>::max()),
+        permInit(range(1,m)),
+        rng_seed(0),
+        seeds(random_vector(seed, m))
         {
-            permInit = std::vector<uint32_t>(m);
-            for(int i = 1; i < m+1; ++i){
-                permInit[i-1] = i;
-            }
-
-            seeds = std::vector<uint32_t>(m);
-
-            std::mt19937 seed_generator(seed);
-            std::uniform_int_distribution<std::mt19937::result_type> dist(1,INT32_MAX); // distribution in range [1, 6]
-            for(int i = 0; i < m; i++) seeds[i] = dist(seed_generator);
-
-            rng_seed = 0;            
+         
         }
 
 FastExpSketch::~FastExpSketch(){}

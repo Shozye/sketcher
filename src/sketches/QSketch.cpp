@@ -9,26 +9,19 @@
 #include<iostream>
 
 QSketch::QSketch(int m, int bytes, int seed) 
-    :   structure_size(m),
-        permutationSwaps(std::vector<unsigned int>(m)),
-        rmin(-std::pow(2, bytes*8 - 1) + 1),
-        rmax(std::pow(2, bytes*8-1) - 1),
-        jstar(0)
+    :   
+        structure_size(m), // to niby nie ale tak do serializacji/deserializacji
+        rmin(-std::pow(2, bytes*8 - 1) + 1), // to potrzebne do serializacji/deserializacji
+        rmax(std::pow(2, bytes*8-1) - 1), // to potrzebne do serializacji/deserializacji
+        structure(std::vector<int>(m, rmin)), // to bardzo bardzo potrzebne do serializacji/deserializacji
+        seeds(random_vector(seed, m)), // seedy sa bardzo potrzebne by pamiętać te same elementy.
+        jstar(0), // niby nie trzeba, mozna inicjalizowac z argmin (structure) ale niech zostanie. :) 
+
+        rng_seed(0), // rng_seed nie jest potrzebny bo jest ustawiany tak naprawde przy każdym consume
+        permInit(range(1,m)), // nie jest potrzebny, jest permutacją która się cofa na swoje miejsce przy każdym consume
+        permutationSwaps(std::vector<unsigned int>(m)) // nie jest potrzebny, nie obchodzi nas co tam jest dopoki nie zaczniemy inicjalizowac jej w consume
         {
-            structure = std::vector<int>(m, rmin);
-
-            permInit = std::vector<uint32_t>(m);
-            for(int i = 1; i < m+1; ++i){
-                permInit[i-1] = i-1;
-            }
-
-            seeds = std::vector<uint32_t>(m);
-
-            std::mt19937 seed_generator(seed);
-            std::uniform_int_distribution<std::mt19937::result_type> dist(1,INT32_MAX);
-            for(int i = 0; i < m; i++) seeds[i] = dist(seed_generator);
-
-            rng_seed = 0;            
+         
         }
 
 QSketch::~QSketch(){}
