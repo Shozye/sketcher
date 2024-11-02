@@ -11,6 +11,7 @@ class QSketch : public Sketch{
         void saveStateIntoStream(std::ofstream ofile) override final;
         double estimateNewton();
         double estimate(double x);
+        double oldEstimate(double x);
         std::string getstructure();
         ~QSketch();
     private: 

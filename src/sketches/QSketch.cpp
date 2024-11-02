@@ -72,6 +72,19 @@ std::string QSketch::getstructure(){
 double QSketch::estimate(double x){
     double s = 0;
     for(int elem: structure){
+        if(elem >= 0){
+            s += 1.0 / (1 << elem);
+        } else {
+            s += (1 << -elem);
+        }
+    }
+    s *= std::pow(2, -x);
+    return (structure_size-1) / s;
+}
+
+double QSketch::oldEstimate(double x){
+    double s = 0;
+    for(int elem: structure){
         s += std::pow(2, (-(double)elem)-x);
     }
     return (structure_size-1) / s;
