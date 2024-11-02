@@ -9,7 +9,14 @@ double relError(double estimated, double real){
 }
 
 double ullto01Interval(uint64_t hash){
-    return ((double) hash) * std::pow(2, -64);
+    double divisor = 0.5;
+    divisor *= divisor; // -2
+    divisor *= divisor; // -4
+    divisor *= divisor; // -8
+    divisor *= divisor; // -16
+    divisor *= divisor; // -32
+    divisor *= divisor; // 2^-64
+    return ((double) hash) * (divisor);
 }
 
 void swap(std::vector<uint32_t>& vec, int a, int b){
@@ -37,6 +44,23 @@ int argmin(std::vector<int> vec){
         }
     }
     return idx;
+}
+
+double pow_2(int exponent) {
+    if(exponent == 0) { return 1; }
+    if(exponent < 0) { return 1.0 / pow_2(-exponent); }
+
+    double result = 1;
+    double base = 2;
+
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result *= base;
+        }
+        base *= base;
+        exponent /= 2;
+    }
+    return result;
 }
 
 std::vector<uint32_t> range(uint32_t a, uint32_t b){
