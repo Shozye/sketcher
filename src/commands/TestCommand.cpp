@@ -28,7 +28,7 @@ void analyseFastExpSketch(const std::vector<Sketch*>& sketches, double totalWeig
 
     double avg_estimate = total_estimate / sketches.size();
     double avg_error = total_relative_error / sketches.size();
-    
+
     std::cout << "[Real_Total_Weight]= " << totalWeight << std::endl;
     std::cout << "[Average_Estimate]= " << avg_estimate << "elems" << std::endl;
     std::cout << "[Average_Relative_Error]= " << avg_error << std::endl;
@@ -56,10 +56,10 @@ void analyseQSketch(const std::vector<Sketch*>& sketches, uint64_t totalWeight) 
 }
 
 
-void analyseQSketchForEstimation(const std::vector<Sketch*>& sketches, uint64_t totalWeight) {
-    double START = 0.25;
-    double END = 0.75;
-    int AMOUNT_POINTS = 5000; 
+void analyseQSketchForEstimation(const std::vector<Sketch*>& sketches, uint64_t totalWeight, const Arguments& args) {
+    double START = args.qsketchStart;
+    double END = args.qsketchEnd;
+    int AMOUNT_POINTS = args.qsketchAmountPoints; 
     // generating linspace that starts at START, ends at END, has AMOUNT_POINTS+1 points.
 
     std::vector<double> total_estimates(AMOUNT_POINTS+1, 0);
@@ -81,12 +81,12 @@ void analyseQSketchForEstimation(const std::vector<Sketch*>& sketches, uint64_t 
     std::cout << "[Real_Total_Weight]= " << totalWeight << std::endl;
     std::cout << "[Average_Estimates]= ";
     for(int x = 0; x <= AMOUNT_POINTS; x++)
-        std::cout << total_estimates[x] / sketches.size();
+        std::cout << total_estimates[x] / sketches.size() << " ";
     std::cout << std::endl;
 
     std::cout << "[Average_Relative_Errors]= ";
     for(int x = 0; x <= AMOUNT_POINTS; x++)
-        std::cout << total_relative_errors[x] / sketches.size();
+        std::cout << total_relative_errors[x] / sketches.size() << " ";
     std::cout << std::endl;
 
 }
@@ -121,7 +121,7 @@ void runTestCommand(const Arguments& args) {
         analyseFastExpSketch(sketches, dist->getTotalWeight());
     } else if(args.sketchName == "qsketch") {
         analyseQSketch(sketches, dist->getTotalWeight());
-        analyseQSketchForEstimation(sketches, dist->getTotalWeight());
+        analyseQSketchForEstimation(sketches, dist->getTotalWeight(), args);
     }
 
     for(auto sketch: sketches){
