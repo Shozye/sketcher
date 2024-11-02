@@ -26,8 +26,8 @@ void Arguments::printInfo() {
               << ", elements: " << this->elements
               << ", sketches: " << this->sketches
               << ", weightDistType: " << this->weightDistType
-              << ", weightA: " << this->weightA
-              << ", weightB: " << this->weightB
+              << ", weightDistArg1: " << this->weightDistArg1
+              << ", weightDistArg2: " << this->weightDistArg2
               << ", itemDist: " << this->itemDist
               << ", sketchSize: " << this->sketchSize
               << ")" << std::endl;

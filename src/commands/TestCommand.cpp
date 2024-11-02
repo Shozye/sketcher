@@ -10,91 +10,85 @@
 #include"../distribution/Distribution.hpp"
 #include <memory>
 #include"common.hpp"
+#include"../utils.hpp"
 
 void analyseFastExpSketch(const std::vector<Sketch*>& sketches, double totalWeight) {
     double total_estimate = 0;
     double total_relative_error = 0;
-    int AMOUNT_SKETCHES = sketches.size();
 
-    std::cout << "realTotalWeight: " << totalWeight << std::endl;
-
-    for (int i = 0; i < AMOUNT_SKETCHES; i++) {
+    for (uint i = 0; i < sketches.size(); i++) {
         FastExpSketch* sketch = dynamic_cast<FastExpSketch*>(sketches[i]);
 
         auto est = sketch->estimate();
-        double error = std::abs(est - totalWeight) / totalWeight;
-        std::cout << "FastExpSketch[" << i << "].estimate() = " << est << "elems, RelativeError=" << error *100 << "%" << std::endl;
+        double error = relError(est, totalWeight);
 
         total_relative_error += error;
         total_estimate += est;
     }
 
-    double avg_estimate = total_estimate / AMOUNT_SKETCHES;
-    double avg_error = total_relative_error / AMOUNT_SKETCHES;
-    double error = std::abs(avg_estimate - totalWeight) / totalWeight;
-    std::cout << "Average Estimate       = " << avg_estimate << "elems" << std::endl;
-    std::cout << "Average Relative Error = " << avg_error * 100 << "%" << std::endl;
-    std::cout << "Relative Error of Average Estimate = " << error * 100 << "%" << std::endl;
+    double avg_estimate = total_estimate / sketches.size();
+    double avg_error = total_relative_error / sketches.size();
+    
+    std::cout << "[Real_Total_Weight]= " << totalWeight << std::endl;
+    std::cout << "[Average_Estimate]= " << avg_estimate << "elems" << std::endl;
+    std::cout << "[Average_Relative_Error]= " << avg_error << std::endl;
 }
 
 void analyseQSketch(const std::vector<Sketch*>& sketches, uint64_t totalWeight) {
     double total_estimate = 0;
     double total_relative_error = 0;
-    int AMOUNT_SKETCHES = sketches.size();
-
-    std::cout << "realTotalWeight: " << totalWeight << std::endl;
-
-    for (int i = 0; i < AMOUNT_SKETCHES; i++) {
-        QSketch* sketch = dynamic_cast<QSketch*>(sketches[i]);
-
-        auto est = sketch->estimateNewton();
-
-        double error = std::abs(est - totalWeight) / totalWeight;
-        //std::cout << "QSketch[" << i << "].estimate() = " << est << "elems, RelativeError=" << error *100 << "%" << std::endl;
-        total_relative_error += error;
-        total_estimate += est;
-    }
-
-    double avg_estimate = total_estimate / AMOUNT_SKETCHES;
-    double avg_error = total_relative_error / AMOUNT_SKETCHES;
-    double error = std::abs(avg_estimate - totalWeight) / totalWeight;
-    std::cout << "Average Estimate       = " << avg_estimate << "elems" << std::endl;
-    std::cout << "Average Relative Error = " << avg_error * 100 << "%" << std::endl;
-    std::cout << "Relative Error of Average Estimate = " << error * 100 << "%" << std::endl;
-}
-
-
-void analyseQSketchForEstimation(const std::vector<Sketch*>& sketches, uint64_t totalWeight) {
-    int HOW_MANY_PARTS = 10000;
-    std::vector<double> total_estimates(HOW_MANY_PARTS+1, 0);
-    std::vector<double> total_relative_errors(HOW_MANY_PARTS+1, 0);
-
-    std::cout << "realTotalWeight: " << totalWeight << std::endl;
 
     for (uint i = 0; i < sketches.size(); i++) {
         QSketch* sketch = dynamic_cast<QSketch*>(sketches[i]);
 
-        for(int x=0; x <= HOW_MANY_PARTS; x++){
-            auto est = sketch->estimate(x / (double)HOW_MANY_PARTS);
-            double error = std::abs(est - totalWeight) / totalWeight;
-            //std::cout << "QSketch[" << i << "].estimate("<<x/(double)HOW_MANY_PARTS<<") = " << est << "elems, RelativeError=" << error *100 << "%" << std::endl;
-            total_relative_errors[x] += error;
-            total_estimates[x] += est;
+        auto est = sketch->estimateNewton();
+        double error = relError(est, totalWeight);
+        total_relative_error += error;
+        total_estimate += est;
+    }
+
+    double avg_estimate = total_estimate / sketches.size();
+    double avg_error = total_relative_error / sketches.size();
+
+    std::cout << "[Real_Total_Weight]= " << totalWeight << std::endl;
+    std::cout << "[Average_Estimate]= " << avg_estimate << "elems" << std::endl;
+    std::cout << "[Average_Relative_Error]= " << avg_error << std::endl;
+}
+
+
+void analyseQSketchForEstimation(const std::vector<Sketch*>& sketches, uint64_t totalWeight) {
+    double START = 0.25;
+    double END = 0.75;
+    int AMOUNT_POINTS = 5000; 
+    // generating linspace that starts at START, ends at END, has AMOUNT_POINTS+1 points.
+
+    std::vector<double> total_estimates(AMOUNT_POINTS+1, 0);
+    std::vector<double> total_relative_errors(AMOUNT_POINTS+1, 0);
+
+    for (uint i = 0; i < sketches.size(); i++) {
+        QSketch* sketch = dynamic_cast<QSketch*>(sketches[i]);
+
+        for(int part_index=0; part_index <= AMOUNT_POINTS; part_index++){
+            auto est = sketch->estimate(part_index * (END-START) / (double) AMOUNT_POINTS);
+            double error = relError(est, totalWeight);
+
+            total_relative_errors[part_index] += error;
+            total_estimates[part_index] += est;
         }
     }
-    std::cout << "Average relative errors: ";
-    for(int x = 0; x <= HOW_MANY_PARTS; x++){
-        double avg_error = total_relative_errors[x] / sketches.size();
-        std::cout << avg_error * 100 << "% ";
-    }
+
+    std::cout << "[START_END_AMOUNTPOINTS]= " << START << " " << END << " " << AMOUNT_POINTS << std::endl; 
+    std::cout << "[Real_Total_Weight]= " << totalWeight << std::endl;
+    std::cout << "[Average_Estimates]= ";
+    for(int x = 0; x <= AMOUNT_POINTS; x++)
+        std::cout << total_estimates[x] / sketches.size();
     std::cout << std::endl;
 
-    std::cout << "Average estimates: ";
-    for(int x = 0; x <= HOW_MANY_PARTS; x++){
-        double avg_estimate = total_estimates[x] / sketches.size();
-        std::cout << avg_estimate << " ";
-    }
+    std::cout << "[Average_Relative_Errors]= ";
+    for(int x = 0; x <= AMOUNT_POINTS; x++)
+        std::cout << total_relative_errors[x] / sketches.size();
     std::cout << std::endl;
+
 }
 
 

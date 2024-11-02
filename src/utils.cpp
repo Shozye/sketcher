@@ -4,6 +4,10 @@
 #include<vector>
 #include<random>
 
+double relError(double estimated, double real){
+    return std::abs(estimated - real) / real;
+}
+
 double ullto01Interval(uint64_t hash){
     return ((double) hash) * std::pow(2, -64);
 }
