@@ -82,15 +82,6 @@ double QSketch::estimate(double x){
     return (structure_size-1) / s;
 }
 
-double QSketch::oldEstimate(double x){
-    double s = 0;
-    for(int elem: structure){
-        s += std::pow(2, (-(double)elem)-x);
-    }
-    return (structure_size-1) / s;
-}
-    
-
 
 int QSketch::rand(int min, int max){
     rng_seed = rng_seed * 1103515245 + 12345;

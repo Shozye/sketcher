@@ -110,9 +110,6 @@ TEST_CASE("Benchmarking estimates") {
     BENCHMARK("estimate(0.5)"){
         return sketch->estimate(0.5);
     };
-    BENCHMARK("oldEstimate(x)"){
-        return sketch->oldEstimate(0.5);
-    };
     BENCHMARK("estimateNewton()"){
         return sketch->estimateNewton();
     };
