@@ -2,3 +2,6 @@ callgrind.out.*
 bin
 build
 .vscode
+data
+**/venv
+**/*.png

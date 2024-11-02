@@ -14,15 +14,13 @@ QSketch::QSketch(int m, int bytes, int seed)
         rmin(-std::pow(2, bytes*8 - 1) + 1), // to potrzebne do serializacji/deserializacji
         rmax(std::pow(2, bytes*8-1) - 1), // to potrzebne do serializacji/deserializacji
         structure(std::vector<int>(m, rmin)), // to bardzo bardzo potrzebne do serializacji/deserializacji
-        seeds(random_vector(seed, m)), // seedy sa bardzo potrzebne by pamiętać te same elementy.
+        seeds(random_vector(m, seed)), // seedy sa bardzo potrzebne by pamiętać te same elementy.
         jstar(0), // niby nie trzeba, mozna inicjalizowac z argmin (structure) ale niech zostanie. :) 
 
         rng_seed(0), // rng_seed nie jest potrzebny bo jest ustawiany tak naprawde przy każdym consume
-        permInit(range(1,m)), // nie jest potrzebny, jest permutacją która się cofa na swoje miejsce przy każdym consume
+        permInit(range(0,m-1)), // nie jest potrzebny, jest permutacją która się cofa na swoje miejsce przy każdym consume
         permutationSwaps(std::vector<unsigned int>(m)) // nie jest potrzebny, nie obchodzi nas co tam jest dopoki nie zaczniemy inicjalizowac jej w consume
-        {
-         
-        }
+        {}
 
 QSketch::~QSketch(){}
 
@@ -48,6 +46,7 @@ void QSketch::consume(const uint8_t* item, int length, double weight){
         uint32_t k = rand(j, structure_size);
         permutationSwaps[j] = k;
         swap(permInit, k, j);
+
         
         if (y > structure[permInit[j]]) {
             structure[permInit[j]] = std::min(rmax, std::max(y, rmin));
@@ -124,17 +123,23 @@ double QSketch::Newton(uint32_t k, double c0)
     return c1;
 }
 
-double QSketch::InitialValue(int m)
+double QSketch::InitialValue()
 {
     double c0 = 0.0;
     double tmp_sum = 0.0;
  
-    for(int i=0; i<m; i++) { 
+    for(int i=0; i<this->structure_size; i++) { 
         tmp_sum += pow(2, -this->structure[i]); 
     }
 
-    c0 = (double)(m-1) / tmp_sum;
+    c0 = (double)(structure_size-1) / tmp_sum;
     return c0;
+}
+
+double QSketch::estimateNewton(){
+    double c0 = InitialValue();
+    double answer = Newton(this->structure_size, c0);
+    return answer;
 }
 
 

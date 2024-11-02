@@ -14,20 +14,22 @@ class QSketch : public Sketch{
         std::string getstructure();
         ~QSketch();
     private: 
-        std::vector<int> structure;
         int structure_size;
-        std::vector<uint32_t> permInit;
-        std::vector<uint32_t> permutationSwaps;
-        std::vector<uint32_t> seeds;
-        uint64_t rng_seed;
-        uint64_t hash_answer[2];
         int rmin;
         int rmax;
+        std::vector<int> structure;
+        std::vector<uint32_t> seeds;
         uint32_t jstar;
+
+        uint64_t rng_seed;
+        std::vector<uint32_t> permInit;
+        std::vector<uint32_t> permutationSwaps;
+
+        uint64_t hash_answer[2];
         int rand(int, int);
         double dffunc(uint32_t k, double w);
         double ffunc(uint32_t k, double w);
         double Newton(uint32_t k, double c0);
-        double InitialValue(int m);
+        double InitialValue();
 
 };

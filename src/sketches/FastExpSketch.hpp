@@ -15,11 +15,13 @@ class FastExpSketch : public Sketch{
     private: 
         std::vector<double> structure;
         int structure_size;
+        std::vector<uint32_t> seeds;
+        double max;
+
+        uint64_t rng_seed;
         std::vector<uint32_t> permInit;
         std::vector<uint32_t> permutationSwaps;
-        double max;
-        std::vector<uint32_t> seeds;
-        uint64_t rng_seed;
+
         int rand(int, int);
         uint64_t hash_answer[2];
 };

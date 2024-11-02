@@ -10,16 +10,15 @@
 
 FastExpSketch::FastExpSketch(int m, int seed) 
     :   
-        structure(std::vector<double>(m, std::numeric_limits<double>::max())),
-        structure_size(m),
-        permutationSwaps(std::vector<unsigned int>(m)),
-        max(std::numeric_limits<double>::max()),
-        permInit(range(1,m)),
-        rng_seed(0),
-        seeds(random_vector(seed, m))
-        {
-         
-        }
+        structure(std::vector<double>(m, std::numeric_limits<double>::max())), // potrzebne
+        structure_size(m), // potrzebne
+        seeds(random_vector(m, seed)),
+        max(std::numeric_limits<double>::max()), // niby nie jest potrzebne, bo moge to policzyc sam
+        
+        rng_seed(0), // rng_seed nie jest potrzebny bo jest ustawiany tak naprawde przy każdym consume
+        permInit(range(1,m)), // nie jest potrzebny, jest permutacją która się cofa na swoje miejsce przy każdym consume
+        permutationSwaps(std::vector<unsigned int>(m)) // nie jest potrzebny, nie obchodzi nas co tam jest dopoki nie zaczniemy inicjalizowac jej w consume
+        {}
 
 FastExpSketch::~FastExpSketch(){}
 
@@ -49,7 +48,7 @@ void FastExpSketch::consume(const uint8_t* item, int length, double weight){
         uint32_t r = rand(k, structure_size);
         permutationSwaps[k] = r;
         swap(permInit, r, k);
-        uint32_t j = permInit[k]-1;
+        uint32_t j = permInit[k]-1; 
 
         if(structure[j] == max) updateMax = true;
         structure[j] = std::min(structure[j], S);

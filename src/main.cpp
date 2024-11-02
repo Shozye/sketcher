@@ -98,7 +98,7 @@ Arguments parseArguments(int argc, char* argv[]) {
 
 
 int main(int argc, char* argv[]) {
-    std::cout << std::fixed << std::setprecision(1);
+    std::cout << std::fixed << std::setprecision(4);
 
     Arguments args = parseArguments(argc, argv);
     args.printInfo();
