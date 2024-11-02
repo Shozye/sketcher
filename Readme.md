@@ -52,7 +52,7 @@ Load sketches from a saved file and perform an analysis.
   - `fastexpsketch`
   - `qsketch`
 
-- **-elems `<amount_elements>`**: Number of elements to process in each sketch. Default: `1000`
+- **-elems `<amount_elements>`**: Number of elements to process in each sketch. Default: `10000`
 
 - **-sketches `<amount_sketches>`**: Number of sketches to create. Default: `1`
 
