@@ -24,6 +24,7 @@ class QSketch : public Sketch{
         uint64_t rng_seed;
         std::vector<uint32_t> permInit;
         std::vector<uint32_t> permutationSwaps;
+        double HELPER_FOR_ESTIMATION = 0;
 
         uint64_t hash_answer[2];
         int rand(int, int);

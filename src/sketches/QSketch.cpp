@@ -30,6 +30,7 @@ void QSketch::saveStateIntoStream(std::ofstream ofile){
 
 
 void QSketch::consume(const uint8_t* item, int length, double weight){
+    HELPER_FOR_ESTIMATION = 0;
     std::memcpy(&rng_seed, item, sizeof(uint64_t));
     int j;
     double r = 0;
@@ -70,9 +71,12 @@ std::string QSketch::getstructure(){
 }
 
 double QSketch::estimate(double x){
-    double s = 0;
-    for(int elem: structure){
-        s += pow_2(-elem); // optimizing with my own pow2 function - 3x boost
+    double s = HELPER_FOR_ESTIMATION;
+    if (s == 0){
+        for(int elem: structure){
+            s += pow_2(-elem); // optimizing with my own pow2 function - 3x boost
+        }
+        HELPER_FOR_ESTIMATION = s;
     }
     s *= 1.0/pow(2.0, x);
     return (structure_size-1) / s;
