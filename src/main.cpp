@@ -42,9 +42,9 @@ Arguments parseArguments(int argc, char* argv[]) {
                if (arg == "-name" && i + 1 < argc) {
             args.sketchName = argv[++i];
         } else if (arg == "-elems" && i + 1 < argc) {
-            args.elements = std::stoi(argv[++i]);
+            args.elements = std::stol(argv[++i]);
         } else if (arg == "-sketches" && i + 1 < argc) {
-            args.sketches = std::stoi(argv[++i]);
+            args.sketches = std::stol(argv[++i]);
         } else if (arg == "-weightDist" && i + 1 < argc) {
             args.weightDistType = argv[++i];
             // i know that they parse as the same... i stil feel it is better
